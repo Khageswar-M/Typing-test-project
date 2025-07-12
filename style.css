@@ -1,0 +1,17 @@
+:root{
+    --primaryColor:#2e2e2e;
+    --secondaryColor:#0b8ee5;
+    --tertiaryColor:#119da4;
+    --fontFamily: monospace;
+}
+.correct{
+    color: green;
+    font-weight: bold;
+    background-color: hsla(120, 100%, 25%, 0.46);
+    border-radius: 20px;
+}
+.incorrect{
+    color: red;
+    font-weight: normal;
+    background-color: hsla(0, 100%, 50%, 0.403);
+}
