@@ -5,13 +5,40 @@
     --fontFamily: monospace;
 }
 .correct{
-    color: green;
+    color: rgba(0, 128, 0, 0.598);
     font-weight: bold;
-    background-color: hsla(120, 100%, 25%, 0.46);
-    border-radius: 20px;
 }
 .incorrect{
     color: red;
     font-weight: normal;
-    background-color: hsla(0, 100%, 50%, 0.403);
+}
+.errorMessage{
+    position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  /* Optional styling */
+  background-color: #f44336; /* red */
+  color: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  z-index: 9999;
+  
+}
+.cancel{
+    position: absolute;
+    top: 7%;
+    right: 5%;
+    font-family: monospace;
+    font-size: 1.2rem;
+    background-color: #5c545466;
+    padding: 0 5px;
+    border-radius: 14px;
+    cursor: pointer;
+}
+
+.cancel:active{
+    display: none;
 }

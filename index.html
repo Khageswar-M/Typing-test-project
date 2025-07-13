@@ -7,8 +7,19 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <input type="text" id="test" autocomplete="off">
-    <p id="words">Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus rerum voluptate, eaque id explicabo saepe repellat hic dicta adipisci animi ex eum totam debitis laborum laudantium fuga amet ullam maiores.</p>
+    <input type="text" id="test" autocomplete="off"><br><br>
+    <label for="wordLength">Length: </label>
+    <input type="number" id="wordLength" min="1" max="1000" value="10" autocomplete="off"><button id="len" onclick="getWords()">Get</button>
+    <h4 id="correctCount">Correct count</h4>
+    <h4 id="incorrectCount">Incorrect count</h4>
+    <h1 id="currLength"></h1>
+    <p id="words"></p>
+
+    <!-- <div class="errorMessage">
+      <div class="cancel"><span>X</span></div>
+    </div> -->
+
+    <!-- <div class="errorMsg"></div> -->
 
     <script src="script.js"></script>
   </body>
