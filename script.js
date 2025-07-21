@@ -26,7 +26,7 @@ let totalLength = 0;
 
 // words.classList.add("word");
 
-getWords();
+
 async function getWords() {
   try {
     const len = wordLengthInput.value || 10;
@@ -34,6 +34,7 @@ async function getWords() {
     const getData = await fetch(apiUrl);
     const datas = await getData.json();
     allWords = datas.length;
+    wordsCount.textContent = `${countWords}/${allWords}`;
     originalText = datas.join(" ") + " ";
     renderCharacters(originalText.split(""));
     inputField.value = "";
@@ -47,6 +48,9 @@ async function getWords() {
     console.error("Fetch failed:", error);
   }
 }
+getWords();
+
+
 function renderCharacters(chars) {
   totalLength = chars.length;
   const textSection = document.querySelector(".text-section");
@@ -76,14 +80,6 @@ function check(inputField) {
     const span = charSpans[index];
 
     if (inputChar === originalChar) {
-      // if(inputChar === " " || index === totalLength){
-      //   stack.push(incorrectCount);
-      //   if(stack.length === 1 && stack[stack.length - 1] === 0){
-      //     countWords++;
-      //   }else if(stack.length > 1 && stack[stack.length - 1] === stack[stack.length - 2]){
-      //     countWords++;
-      //   }
-      // }
       correctCount++;
       correctnessArray[index] = true;
       if (span) {
@@ -93,7 +89,6 @@ function check(inputField) {
       checkWords(inputChar, index);
     } else {
       incorrectCount++;
-      // stack.push(incorrectCount);
       correctnessArray[index] = false;
       if (span) {
         span.classList.add("incorrect");
@@ -118,8 +113,9 @@ function check(inputField) {
     prevLength = currLength;
   }
 
-  wordsCount.textContent = `${countWords}/${allWords}`;
 }
+
+
 
 inputField.addEventListener("input", () => {
   // Prevent multiple consecutive spaces
@@ -162,6 +158,7 @@ function checkWords(inputChar, index){
     }else if(stack.length > 1 && stack[stack.length - 1] === stack[stack.length - 2]){
       countWords++;
     }
+    wordsCount.textContent = `${countWords}/${allWords}`;
   }
 }
 
