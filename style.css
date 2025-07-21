@@ -1,44 +1,245 @@
-:root{
-    --primaryColor:#2e2e2e;
-    --secondaryColor:#0b8ee5;
-    --tertiaryColor:#119da4;
-    --fontFamily: monospace;
+:root {
+  --primaryColor: #2e2e2e;
+  --secondaryColor: #0b8ee5;
+  --tertiaryColor: #119da4;
+  --fontFamily: Arial, Helvetica, sans-serif;
 }
-.correct{
-    color: rgba(0, 128, 0, 0.598);
-    font-weight: bold;
+body {
+  background-color: hsl(204, 70%, 11%);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0px;
 }
-.incorrect{
-    color: red;
-    font-weight: normal;
+.element-container {
+  background-color: #102942;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 80%;
+  box-shadow: 0px 0px 20px #14141459;
+  height: 98%;
+  border-radius: 15px;
 }
-.errorMessage{
-    position: fixed;
+#test{
+    width: 0px;
+    height: 0px;
+    z-index: -1;
+    opacity: 0;
+}
+#app-name {
+  margin: 13px 0px 0px 0px;
+  font-family: sans-serif;
+  color: white;
+  position: relative;
+  top: -5px;
+  font-size: 2rem;
+
+  background: linear-gradient(90deg, #4180ff, #ff4b2b, #9741ff);
+  background-size: 300% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: moveGradient 5s ease-in-out infinite;
+}
+@keyframes moveGradient {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+#desc {
+  margin: 0px 0px 10px 0px;
+  font-size: 13px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #919191e8;
+  position: relative;
+  top: 0px;
+}
+.inner-one {
+  position: relative;
+  top: 16px;
+  border-radius: 12px;
+  height: 75%;
+  background-color: #07152c;
+  width: 94%;
+  box-shadow: 0px 0px 18px #0000002e;
+}
+.operations {
+  color: #ffffff8a;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+  margin: 15px;
+  font-family: sans-serif;
+  font-size: 13px;
+}
+.operations div div{
+  font-size: 16px;
+  color: darkorange;
+  font-weight: bold;
+}
+
+.ranging {
+  display: flex;
+  margin: 0 auto;
+  width: 96%;
+  background-color: white;
+  height: 10px;
+  border-radius: 10px;
+  align-items: center;
+}
+.range {
+  height: 9px;
+  background-color: green;
+  width: 89%;
+  border-radius: 15px;
+  transform: translateX(1px);
+}
+#type-it {
+  color: #ffffff7a;
+  font-family: sans-serif;
+  margin: 15px;
+  font-size: 1rem;
+}
+.text-section {
+  background-color: #07152c;
+  height: 40vh;
+  width: 95%;
+  margin: 0 auto;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  font-size: 1.8rem;
+  font-family: sans-serif;
+  font-weight: bold;
+  color: #454444;
+}
+.operationsTwo {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 15px;
+  color: #ffffff99;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+.lengthOfParagraph input {
+  width: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: darkorange;
+  background-color: #8080801a;
+  border: none;
+  outline: 2px black;
+}
+.wordsCompleted{
+    display: flex;
+}
+.wordsCompleted div {
+    margin-left: 5px;
+  color: darkorange;
+}
+.buttonsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.buttonsContainer button {
+  font-size: 14px;
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  font-weight: bold;
+  background-color: green;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.645);
+}
+#start {
+  background-color: hsl(200, 80%, 29%);
+}
+#start:hover {
+  background-color: hsl(200, 80%, 49%);
+}
+#start:active {
+  background-color: hsl(200, 80%, 69%);
+}
+
+#restart {
+  background-color: hsl(100, 90%, 29%);
+}
+#restart:hover {
+  background-color: hsl(100, 90%, 49%);
+}
+#restart:active {
+  background-color: hsl(100, 90%, 69%);
+}
+
+#tryAgain {
+  background-color: hsl(25, 100%, 29%);
+}
+#tryAgain:hover {
+  background-color: hsl(25, 100%, 49%);
+}
+#tryAgain:active {
+  background-color: hsl(25, 100%, 69%);
+}
+
+
+
+.correct {
+  color: rgba(0, 128, 0, 0.801);
+  font-weight: bold;
+}
+.incorrect {
+  color: red;
+  font-weight: bold;
+}
+.errorMessage {
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  
+
   /* Optional styling */
   background-color: #f44336; /* red */
   color: white;
   padding: 20px 30px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   z-index: 9999;
-  
 }
-.cancel{
-    position: absolute;
-    top: 7%;
-    right: 5%;
-    font-family: monospace;
-    font-size: 1.2rem;
-    background-color: #5c545466;
-    padding: 0 5px;
-    border-radius: 14px;
-    cursor: pointer;
+.cancel {
+  position: absolute;
+  top: 7%;
+  right: 5%;
+  font-family: monospace;
+  font-size: 1.2rem;
+  background-color: #5c545466;
+  padding: 0 5px;
+  border-radius: 14px;
+  cursor: pointer;
 }
 
-.cancel:active{
-    display: none;
+.cancel:active {
+  display: none;
+}
+
+.word {
+  font-size: 2rem;
+  color: #616161e8;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
 }

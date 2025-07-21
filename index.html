@@ -7,19 +7,45 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <input type="text" id="test" autocomplete="off"><br><br>
-    <label for="wordLength">Length: </label>
-    <input type="number" id="wordLength" min="1" max="1000" value="10" autocomplete="off"><button id="len" onclick="getWords()">Get</button>
-    <h4 id="correctCount">Correct count</h4>
-    <h4 id="incorrectCount">Incorrect count</h4>
-    <h1 id="currLength"></h1>
-    <p id="words"></p>
-
-    <!-- <div class="errorMessage">
-      <div class="cancel"><span>X</span></div>
-    </div> -->
-
-    <!-- <div class="errorMsg"></div> -->
+    <div class="element-container">
+      <h2 id="app-name">AukTyping</h2>
+      <p id="desc">Boost your speed with real-time feedback</p>
+      <input type="text" id="test" autocomplete="off" />
+      <div class="inner-one">
+        <div class="operations">
+          <div class="timmer">Timer<br /><div class="time">00:00</div></div>
+          <div class="wpm">WPM<br /><div class="wpms">000</div></div>
+          <div class="accurecy">Accurecy<br /><div class="accurecies">000</div></div>
+          <div class="score">Score<br /><div class="scrres">000</div></div>
+        </div>
+        <div class="ranging">
+          <div class="range"></div>
+        </div>
+        <h2 id="type-it">Type this:</h2>
+        <div class="text-section">
+         
+        </div>
+        <div class="operationsTwo">
+          <div class="lengthOfParagraph">
+            Get length:
+            <input
+              type="number"
+              id="wordLength"
+              min="1"
+              max="1000"
+              value="10"
+              autocomplete="off"
+             />
+          </div>
+          <div class="wordsCompleted">Words: <div class="wordsC">000/000</div></div>
+        </div> 
+        <div class="buttonsContainer">
+          <button id="start" onclick="getWords()">Start</button>
+          <button id="restart" onclick="">Restart</button>
+          <button id="tryAgain" onclick="">Try Again</button>
+        </div>
+        
+    </div>
 
     <script src="script.js"></script>
   </body>
