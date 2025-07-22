@@ -4,6 +4,10 @@ const wordLengthInput = document.getElementById("wordLength");
 const inputField = document.getElementById("test");
 const wordsCount = document.querySelector(".wordsC");
 
+const wpm = document.querySelector(".wpms");
+  const accuracy = document.querySelector(".accuracies");
+  const score = document.querySelector(".scores");
+
 
 
 document.addEventListener("keydown", (event)=>{
@@ -18,10 +22,12 @@ document.addEventListener("keydown", (event)=>{
  
 let correctCount = 0;
 let incorrectCount = 0;
+let totalLength = 0;
+
+
 let countWords = 0;
 
 let allWords = 0;
-let totalLength = 0;
 
 
 // words.classList.add("word");
@@ -29,7 +35,7 @@ let totalLength = 0;
 
 async function getWords() {
   try {
-    const len = wordLengthInput.value || 10;
+    const len = wordLengthInput.value || 1;
     const apiUrl = `https://random-word-api.vercel.app/api?words=${len}`;
     const getData = await fetch(apiUrl);
     const datas = await getData.json();
@@ -63,9 +69,7 @@ function renderCharacters(chars) {
     textSection.appendChild(span);
     charSpans.push(span);
   });
-
 }
-
 let stack = [];
 
 function check(inputField) {
@@ -146,9 +150,15 @@ inputField.addEventListener("input", () => {
     result();
   }
 });
+
+
+//RESULT
 function result(){
   stopTimmer();
   inputField.blur();
+  
+  displayWpmAccuracyScore();
+  
 }
 function checkWords(inputChar, index){
   if(inputChar === " " || index === totalLength){
@@ -179,7 +189,6 @@ function updateTime(){
   timmer.textContent = `
     ${min.toString().padStart(2, 0)}:${secs.toString().padStart(2, 0)}
   `;
-
 }
 function startTimmer(){
   if(isRunning) return;
@@ -196,7 +205,33 @@ function stopTimmer(){
 }
 
 //WPM
-const wpm = document.querySelector(".wpm");
-function wpmIs(){
+
+function displayWpmAccuracyScore(){
+  // const wpm = document.querySelector(".wpms");
+  // const accuracy = document.querySelector(".accuracies");
+  // const score = document.querySelector(".scores");
+
+  //for wpm
+  let myWpm = 0;
+  const t = timmer.textContent.split(":");
+  const min = (Number(t[0]) * 60 + Number(t[1])) / 60;
+  if(allWords === 1){
+    myWpm = (allWords/ min);
+  }else{
+    myWpm = (countWords / min);
+  }
+
+  //for accuracy
+  const totalCharLengths = correctCount + incorrectCount;
+  const acc = Math.round(((correctCount / totalCharLengths) * 100));
+  const myAccuracy = `${acc}%`;
+
+  //for score
+  const myScore = Math.round((Math.min(myWpm, 100)) * (acc / 100));
+
+  wpm.textContent = myWpm;
+  accuracy.textContent = myAccuracy;
+  score.textContent = myScore;
 
 }
+

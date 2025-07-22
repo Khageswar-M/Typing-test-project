@@ -134,13 +134,19 @@ body {
   font-size: 14px;
 }
 .lengthOfParagraph input {
-  width: 20px;
+  width: 30px;
   font-size: 14px;
   font-weight: bold;
   color: darkorange;
   background-color: #8080801a;
   border: none;
   outline: 2px black;
+  border-radius: 5px;
+}
+.lengthOfParagraph input::-webkit-inner-spin-button,
+.lengthOfParagraph input::-webkit-outer-spin-button{
+  -webkit-appearance: none;
+  margin: 0;
 }
 .wordsCompleted{
     display: flex;
