@@ -1,52 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Typing Test</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="element-container">
-      <h2 id="app-name">AukTyping</h2>
-      <p id="desc">Boost your speed with real-time feedback</p>
-      <input type="text" id="test" autocomplete="off" />
-      <div class="inner-one">
-        <div class="operations">
-          <div class="timmer">Timer<br /><div class="time">00:00</div></div>
-          <div class="wpm">WPM<br /><div class="wpms">000</div></div>
-          <div class="accurecy">Accuracy<br /><div class="accuracies">000</div></div>
-          <div class="score">Score<br /><div class="scores">000</div></div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AukTyping</title>
+  <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="element-container">
+    <h2 id="app-name">AukTyping</h2>
+    <p id="desc">Boost your speed with real-time feedback</p>
+    <input type="text" id="test" autocomplete="off" />
+    <div class="inner-one">
+      <div class="operations">
+        <div class="timmer">Timer<br />
+          <div class="time">00:00</div>
         </div>
-        <div class="ranging">
-          <div class="range"></div>
+        <div class="wpm">WPM<br />
+          <div class="wpms">0</div>
         </div>
-        <h2 id="type-it">Type this:</h2>
-        <div class="text-section">
-         
+        <div class="accurecy">Accuracy<br />
+          <div class="accuracies">0%</div>
         </div>
-        <div class="operationsTwo">
-          <div class="lengthOfParagraph">
-            Get length:
-            <input
-              type="number"
-              id="wordLength"
-              min="1"
-              max="500"
-              value="1"
-              autocomplete="off"
-             />
-          </div>
-          <div class="wordsCompleted">Words: <div class="wordsC">000/000</div></div>
-        </div> 
-        <div class="buttonsContainer">
-          <button id="start" onclick="getWords()">Start</button>
-          <button id="restart" onclick="">Restart</button>
-          <button id="tryAgain" onclick="">Try Again</button>
+        <div class="test">Test<br />
+          <div class="testCount">0</div>
         </div>
-        
+      </div>
+      <div class="ranging">
+        <div class="range"></div>
+      </div>
+      <h2 id="type-it">Type this:</h2>
+      <div class="text-section">
+
+      </div>
+      <div class="operationsTwo">
+        <div class="lengthOfParagraph">
+          Get length:
+          <input type="number" id="wordLength" min="1" max="1000" value="4" autocomplete="off" />
+        </div>
+        <div class="wordsCompleted">Words: <div class="wordsC">000/000</div>
+        </div>
+      </div>
+      <div class="buttonsContainer">
+        <button id="start" onclick="getWords()">Start</button>
+        <!-- <button id="restart" onclick="">Restart</button>
+        <button id="tryAgain" onclick="">Try Again</button> -->
+      </div>
+
     </div>
 
     <script src="script.js"></script>
-  </body>
+</body>
+
 </html>

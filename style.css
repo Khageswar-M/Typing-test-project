@@ -1,8 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Poetsen+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap');
+
+
 :root {
   --primaryColor: #2e2e2e;
   --secondaryColor: #0b8ee5;
   --tertiaryColor: #119da4;
-  --fontFamily: Arial, Helvetica, sans-serif;
+  --fontFamily: "Poetsen One", sans-serif;
+
+  --background-color: hsl(281, 91%, 22%);
+  --color: hsla(229, 74%, 76%, 0.613);
 }
 body {
   background-color: hsl(204, 70%, 11%);
@@ -101,9 +107,10 @@ body {
 .range {
   height: 9px;
   background-color: green;
-  width: 89%;
+  width: 0%;
   border-radius: 15px;
   transform: translateX(1px);
+  transition: width 0.5s ease-in-out;
 }
 #type-it {
   color: #ffffff7a;

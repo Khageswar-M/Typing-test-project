@@ -3,10 +3,15 @@ let charSpans = [];
 const wordLengthInput = document.getElementById("wordLength");
 const inputField = document.getElementById("test");
 const wordsCount = document.querySelector(".wordsC");
+const startBtn = document.getElementById("start");
+const range = document.querySelector(".range");
 
+const timmer = document.querySelector(".time");
 const wpm = document.querySelector(".wpms");
-  const accuracy = document.querySelector(".accuracies");
-  const score = document.querySelector(".scores");
+const accuracy = document.querySelector(".accuracies");
+const test = document.querySelector(".testCount");
+let testCount = 1;
+test.innerHTML = testCount;
 
 
 
@@ -30,18 +35,70 @@ let countWords = 0;
 let allWords = 0;
 
 
-// words.classList.add("word");
 
+const Words = [
+  "apple", "water", "sun", "code", "drive", "mouse", "hello", "world",
+  "brain", "cloud", "sky", "green", "blue", "quick", "smart", "light",
+  "dark", "wind", "stone", "river", "earth", "happy", "plant", "learn",
+  "teach", "build", "play", "read", "write", "sound", "clear", "space",
+  "clock", "timer", "phone", "laugh", "think", "dream", "sleep", "walk",
+  "run", "jump", "talk", "listen", "touch", "stand", "sit", "open",
+  "close", "carry", "bring", "catch", "throw", "build", "break", "start",
+  "stop", "push", "pull", "lift", "drop", "hold", "leave", "enter", "exit",
+  "watch", "show", "hide", "seek", "share", "smile", "trust", "prove",
+  "clear", "focus", "plan", "go", "yes", "no", "why", "try", "win", "fail",
+  "hope", "save", "load", "find", "love", "hate", "care", "grow", "aim",
+  "rest", "rise", "burn", "melt", "cool", "heat", "roam", "stay", "live",
+  "gone", "fast", "slow", "kind", "mean", "bold", "neat", "calm", "loud",
+  "quiet", "young", "older", "sweet", "bitter", "fun", "sad", "joy", "true",
+  "false", "start", "begin", "peace", "fight", "game", "level", "score",
+  "title", "write", "input", "output", "value", "logic", "token", "debug",
+  "check", "class", "field", "event", "array", "string", "object", "while",
+  "return", "import", "export", "module", "public", "static", "method",
+  "button", "submit", "select", "option", "update", "delete", "insert",
+  "server", "client", "admin", "author", "user", "login", "logout", "route",
+  "query", "index", "main", "merge", "branch", "fetch", "pull", "push",
+  "commit", "remote", "clone", "reset", "revert", "build", "test", "deploy",
+  "ready", "clean", "cache", "setup", "tools", "debug", "theme", "style",
+  "color", "shade", "border", "radius", "width", "height", "align", "flex",
+  "grid", "gap", "wrap", "code", "html", "css", "react", "node", "express",
+  "route", "path", "auth", "jwt", "api", "rest", "json", "data", "model",
+  "schema", "mysql", "mongo", "query", "sql", "join", "group", "count",
+  "limit", "order", "asc", "desc", "map", "loop", "each", "call", "bind",
+  "apply", "scope", "this", "that", "then", "else", "case", "true", "false",
+  "const", "let", "var", "zero", "one", "two", "three", "four", "five",
+  "six", "seven", "eight", "nine", "ten", "math", "calc", "eval", "sum",
+  "diff", "avg", "max", "min", "even", "odd", "prime", "fact", "mod", "pow",
+  "sqrt", "log", "round", "floor", "ceil", "abs", "type", "check", "match",
+  "regex", "test", "pass", "fail", "run", "skip", "mark", "todo", "note",
+  "warn", "error", "info", "msg", "text", "line", "file", "path", "link",
+  "href", "host", "port", "site", "page", "view", "load", "save", "edit",
+  "form", "grid", "flex", "item", "list", "menu", "nav", "head", "body",
+  "foot", "main", "aside", "span", "div", "wrap", "box", "img", "icon",
+  "font", "bold", "thin", "size", "line", "pad", "mar", "top", "left",
+  "right", "down", "back", "next", "prev", "up", "all", "any", "some"
+];
 
-async function getWords() {
+startBtn.addEventListener("click" , (e) => e.target.textContent = "Test Again");
+function getWords() {
   try {
-    const len = wordLengthInput.value || 1;
-    const apiUrl = `https://random-word-api.vercel.app/api?words=${len}`;
-    const getData = await fetch(apiUrl);
-    const datas = await getData.json();
-    allWords = datas.length;
+    timmer.textContent = "00:00";
+    wpm.textContent = "0";
+    accuracy.textContent = "0%";
+    countWords = 0;
+    range.style.width = "0%";
+    
+    const len = wordLengthInput.value || 10;
+    let sentence = "";
+    for(let i = 0; i < len; i++){
+      const index = Math.floor(Math.random() * 342);
+      console.log(`${Words.length} ${index}`);
+      sentence += Words[index] + " ";
+    }
+    allWords = len;
     wordsCount.textContent = `${countWords}/${allWords}`;
-    originalText = datas.join(" ") + " ";
+    console.log(sentence);
+    originalText = sentence;
     renderCharacters(originalText.split(""));
     inputField.value = "";
 
@@ -51,10 +108,11 @@ async function getWords() {
     prevLength = 0;
     correctnessArray = [];
   } catch (error) {
-    console.error("Fetch failed:", error);
+    throw new Error("Error", error);
   }
 }
 getWords();
+
 
 
 function renderCharacters(chars) {
@@ -141,10 +199,13 @@ inputField.addEventListener("input", () => {
 
     if(stack.length > 1 && stack[stack.length - 1] === stack[stack.length - 2]){
       countWords++;
+    }else{
+      countWords++;
     }
 
     check(inputField);
     result();
+    test.innerHTML = ++testCount;
     console.log("finished")
   }else {
     result();
@@ -156,9 +217,9 @@ inputField.addEventListener("input", () => {
 function result(){
   stopTimmer();
   inputField.blur();
-  
-  displayWpmAccuracyScore();
-  
+  displayWpmAccuracy();
+  ranging();
+  console.log(`${correctCount + incorrectCount} = ${originalText.split("").length} = ${totalLength - 1}`)
 }
 function checkWords(inputChar, index){
   if(inputChar === " " || index === totalLength){
@@ -174,7 +235,7 @@ function checkWords(inputChar, index){
 
 
 //TIMMER
-const timmer = document.querySelector(".time");
+
 let startTime = 0;
 let elapseTime = 0;
 let interval = 0;
@@ -204,34 +265,39 @@ function stopTimmer(){
   isRunning = false;
 }
 
-//WPM
-
-function displayWpmAccuracyScore(){
-  // const wpm = document.querySelector(".wpms");
-  // const accuracy = document.querySelector(".accuracies");
-  // const score = document.querySelector(".scores");
+let myWpm = 0;
+let acc = 0;
+// let myScore = 0;
+function displayWpmAccuracy(){
 
   //for wpm
-  let myWpm = 0;
   const t = timmer.textContent.split(":");
-  const min = (Number(t[0]) * 60 + Number(t[1])) / 60;
+  const min = ((Number(t[0]) * 60) + Number(t[1])) / 60;
   if(allWords === 1){
     myWpm = (allWords/ min);
   }else{
-    myWpm = (countWords / min);
+    myWpm = (correctCount * min);
   }
-
+  console.log(`${myWpm} ${min}`)
   //for accuracy
   const totalCharLengths = correctCount + incorrectCount;
-  const acc = Math.round(((correctCount / totalCharLengths) * 100));
+  acc = Math.round(((correctCount / totalCharLengths) * 100));
   const myAccuracy = `${acc}%`;
 
-  //for score
-  const myScore = Math.round((Math.min(myWpm, 100)) * (acc / 100));
-
-  wpm.textContent = myWpm;
+  wpm.textContent = myWpm.toFixed(0);
   accuracy.textContent = myAccuracy;
-  score.textContent = myScore;
-
+  
 }
 
+function ranging(){
+    
+    
+    const maxWpm = 100;
+    const wmpScore = Math.min(myWpm, maxWpm) / 100;
+    const accuracyScore = acc / 100;
+    const performanceScore = (wmpScore * 0.6 + accuracyScore * 0.4) * 100;
+    
+    
+    const performance = Math.round(performanceScore);
+    range.style.width = `${performance}%`;
+}
