@@ -1,41 +1,3 @@
-let originalText = "";
-let charSpans = [];
-const wordLengthInput = document.getElementById("wordLength");
-const inputField = document.getElementById("test");
-const wordsCount = document.querySelector(".wordsC");
-const startBtn = document.getElementById("start");
-const range = document.querySelector(".range");
-
-const timmer = document.querySelector(".time");
-const wpm = document.querySelector(".wpms");
-const accuracy = document.querySelector(".accuracies");
-const test = document.querySelector(".testCount");
-let testCount = 1;
-test.innerHTML = testCount;
-
-
-
-document.addEventListener("keydown", (event)=>{
-    if(event.key === 'Enter'){
-      inputField.focus();
-      startTimmer();
-    };
-    if(event.key === 'Backspace' || event.key === 'Delete' || event.key.startsWith("Arrow")){
-      event.preventDefault();
-    }
-});
- 
-let correctCount = 0;
-let incorrectCount = 0;
-let totalLength = 0;
-
-
-let countWords = 0;
-
-let allWords = 0;
-
-
-
 const Words = [
   "apple", "water", "sun", "code", "drive", "mouse", "hello", "world",
   "brain", "cloud", "sky", "green", "blue", "quick", "smart", "light",
@@ -79,24 +41,98 @@ const Words = [
   "right", "down", "back", "next", "prev", "up", "all", "any", "some"
 ];
 
-startBtn.addEventListener("click" , (e) => e.target.textContent = "Test Again");
+
+let originalText = "";
+let charSpans = [];
+const wordLengthInput = document.getElementById("wordLength");
+const inputField = document.getElementById("test");
+const startBtn = document.getElementById("start");
+const range = document.querySelector(".range");
+
+const timmer = document.querySelector(".time");
+const wpm = document.querySelector(".wpms");
+const accuracy = document.querySelector(".accuracies");
+const test = document.querySelector(".testCount");
+
+const errorHandler = document.getElementById("warningHandler");
+const errorMessage = document.querySelector(".errorText");
+const cancelHandler = document.getElementById("cancel");
+const start = document.getElementById("start");
+
+let testCount = 1;
+test.innerHTML = testCount;
+
+cancelHandler.addEventListener("click", (e) => {
+  errorHandler.style.visibility = "hidden";
+});
+
+let tabFocused = false;
+document.addEventListener("keydown", (event) => {
+
+  const isStartFocused = document.activeElement === start;
+
+  if (event.key === 'Enter') {
+    
+    if (isStartFocused) {
+      errorHandler.style.display = "none";
+      inputField.focus();
+      start.click();
+      return;
+    }
+
+
+    errorHandler.style.display = "none";
+    // start.click();
+    inputField.focus();
+    startTimmer();
+  }
+
+  if (event.key === 'Backspace' || event.key === 'Delete' || event.key.startsWith("Arrow")) {
+    event.preventDefault();
+  }
+
+  if (event.key === 'Tab') {
+    event.preventDefault();
+    start.focus();
+  }
+});
+
+let correctCount = 0;
+let incorrectCount = 0;
+let totalLength = 0;
+
+
+let countWords = 0;
+
+let allWords = 0;
+
+
+
+
 function getWords() {
   try {
+    errorMessage.innerHTML = "Press Enter to focus";
+    if(errorHandler.style.display != "none"){
+      errorHandler.style.display = "flex";
+    }
+
     timmer.textContent = "00:00";
     wpm.textContent = "0";
     accuracy.textContent = "0%";
-    countWords = 0;
     range.style.width = "0%";
-    
+
     const len = wordLengthInput.value || 10;
+    if(len < 1 || len > 1000){
+      errorMessage.innerHTML = "Words must be 1 to 1000";
+      errorHandler.style.display = "flex";
+      return;
+    }
     let sentence = "";
-    for(let i = 0; i < len; i++){
+    for (let i = 0; i < len; i++) {
       const index = Math.floor(Math.random() * 342);
       console.log(`${Words.length} ${index}`);
       sentence += Words[index] + " ";
     }
-    allWords = len;
-    wordsCount.textContent = `${countWords}/${allWords}`;
     console.log(sentence);
     originalText = sentence;
     renderCharacters(originalText.split(""));
@@ -108,7 +144,8 @@ function getWords() {
     prevLength = 0;
     correctnessArray = [];
   } catch (error) {
-    throw new Error("Error", error);
+    errorMessage.textContent = `Erro: ${error}`;
+    errorHandler.style.display = "flex";
   }
 }
 getWords();
@@ -148,7 +185,6 @@ function check(inputField) {
         span.classList.add("correct");
         span.classList.remove("incorrect");
       }
-      checkWords(inputChar, index);
     } else {
       incorrectCount++;
       correctnessArray[index] = false;
@@ -195,11 +231,11 @@ inputField.addEventListener("input", () => {
   const totalTyped = correctCount + incorrectCount;
   if (totalTyped < totalLength - 2) {
     check(inputField);
-  }else if(totalTyped <= totalLength - 2){
+  } else if (totalTyped <= totalLength - 2) {
 
-    if(stack.length > 1 && stack[stack.length - 1] === stack[stack.length - 2]){
+    if (stack.length > 1 && stack[stack.length - 1] === stack[stack.length - 2]) {
       countWords++;
-    }else{
+    } else {
       countWords++;
     }
 
@@ -207,31 +243,10 @@ inputField.addEventListener("input", () => {
     result();
     test.innerHTML = ++testCount;
     console.log("finished")
-  }else {
+  } else {
     result();
   }
 });
-
-
-//RESULT
-function result(){
-  stopTimmer();
-  inputField.blur();
-  displayWpmAccuracy();
-  ranging();
-  console.log(`${correctCount + incorrectCount} = ${originalText.split("").length} = ${totalLength - 1}`)
-}
-function checkWords(inputChar, index){
-  if(inputChar === " " || index === totalLength){
-    stack.push(incorrectCount);
-    if(stack.length === 1 && stack[stack.length - 1] === 0){
-      countWords++;
-    }else if(stack.length > 1 && stack[stack.length - 1] === stack[stack.length - 2]){
-      countWords++;
-    }
-    wordsCount.textContent = `${countWords}/${allWords}`;
-  }
-}
 
 
 //TIMMER
@@ -241,7 +256,7 @@ let elapseTime = 0;
 let interval = 0;
 let isRunning = false;
 
-function updateTime(){
+function updateTime() {
 
   let time = elapseTime;
   let hrs = Math.floor(time / 3600000);
@@ -251,33 +266,33 @@ function updateTime(){
     ${min.toString().padStart(2, 0)}:${secs.toString().padStart(2, 0)}
   `;
 }
-function startTimmer(){
-  if(isRunning) return;
+function startTimmer() {
+  if (isRunning) return;
   isRunning = true;
   startTime = Date.now() - elapseTime;
-  interval = setInterval(() =>{
+  interval = setInterval(() => {
     elapseTime = Date.now() - startTime;
     updateTime();
   }, 1000);
 }
-function stopTimmer(){
+function stopTimmer() {
   clearInterval(interval);
   isRunning = false;
 }
 
 let myWpm = 0;
 let acc = 0;
-// let myScore = 0;
-function displayWpmAccuracy(){
+function displayWpmAccuracy() {
 
   //for wpm
   const t = timmer.textContent.split(":");
   const min = ((Number(t[0]) * 60) + Number(t[1])) / 60;
-  if(allWords === 1){
-    myWpm = (allWords/ min);
-  }else{
-    myWpm = (correctCount * min);
+  if (min === 0) {
+    myWpm = (correctCount / (5 * 0.01));
+  } else {
+    myWpm = (correctCount / (5 * min));
   }
+
   console.log(`${myWpm} ${min}`)
   //for accuracy
   const totalCharLengths = correctCount + incorrectCount;
@@ -286,18 +301,27 @@ function displayWpmAccuracy(){
 
   wpm.textContent = myWpm.toFixed(0);
   accuracy.textContent = myAccuracy;
-  
+
 }
 
-function ranging(){
-    
-    
-    const maxWpm = 100;
-    const wmpScore = Math.min(myWpm, maxWpm) / 100;
-    const accuracyScore = acc / 100;
-    const performanceScore = (wmpScore * 0.6 + accuracyScore * 0.4) * 100;
-    
-    
-    const performance = Math.round(performanceScore);
-    range.style.width = `${performance}%`;
+function ranging() {
+
+
+  const maxWpm = 100;
+  const wmpScore = Math.min(myWpm, maxWpm) / 100;
+  const accuracyScore = acc / 100;
+  const performanceScore = (wmpScore * 0.6 + accuracyScore * 0.4) * 100;
+
+
+  const performance = Math.round(performanceScore);
+  range.style.width = `${performance}%`;
+}
+//RESULT
+function result() {
+  stopTimmer();
+  inputField.blur();
+  displayWpmAccuracy();
+  ranging();
+  startBtn.innerHTML = "Test Again";
+
 }
