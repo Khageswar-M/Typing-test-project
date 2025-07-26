@@ -44,6 +44,7 @@ const Words = [
 
 let originalText = "";
 let charSpans = [];
+const textSection = document.querySelector(".text-section");
 const wordLengthInput = document.getElementById("wordLength");
 const inputField = document.getElementById("test");
 const startBtn = document.getElementById("start");
@@ -59,24 +60,51 @@ const errorMessage = document.querySelector(".errorText");
 const cancelHandler = document.getElementById("cancel");
 const start = document.getElementById("start");
 
-let testCount = 1;
+let testCount = 0;
 test.innerHTML = testCount;
 
-cancelHandler.addEventListener("click", (e) => {
-  errorHandler.style.visibility = "hidden";
-});
+
+
+const handleBackspace = (e) => {
+  if (e.key === 'Backspace') {
+    e.preventDefault();
+  }
+};
 
 let tabFocused = false;
 document.addEventListener("keydown", (event) => {
 
+
+  //Check wheather the input filed is focused or not
+  if(inputField != document.activeElement){
+    errorMessage.textContent = "Press Enter to focus";
+    if(errorHandler.style.display === "none"){
+      errorHandler.style.display = "flex";
+    }
+  }
+
   const isStartFocused = document.activeElement === start;
+  if (event.key === 'ArrowDown') {
+    textSection.scrollTo({
+      top: textSection.scrollTop + textSection.clientHeight * 0.4,
+      behavior: "smooth"
+    });
+  }
+  if (event.key === 'ArrowUp') {
+    textSection.scrollTo({
+      top: textSection.scrollTop - textSection.clientHeight * 0.4,
+      behavior: "smooth"
+    });
+  }
+
 
   if (event.key === 'Enter') {
-    
+
     if (isStartFocused) {
       errorHandler.style.display = "none";
       inputField.focus();
       start.click();
+      stopTimmer();
       return;
     }
 
@@ -84,23 +112,25 @@ document.addEventListener("keydown", (event) => {
     errorHandler.style.display = "none";
     // start.click();
     inputField.focus();
-    startTimmer();
-  }
 
-  if (event.key === 'Backspace' || event.key === 'Delete' || event.key.startsWith("Arrow")) {
-    event.preventDefault();
   }
 
   if (event.key === 'Tab') {
     event.preventDefault();
+    // stopTimmer();
+    tabFocused = true;
     start.focus();
   }
+});
+
+cancelHandler.addEventListener("click" , () => {
+  errorHandler.style.display = "none";
 });
 
 let correctCount = 0;
 let incorrectCount = 0;
 let totalLength = 0;
-
+let currentIndex = 0;
 
 let countWords = 0;
 
@@ -112,8 +142,9 @@ let allWords = 0;
 function getWords() {
   try {
     errorMessage.innerHTML = "Press Enter to focus";
-    if(errorHandler.style.display != "none"){
+    if (errorHandler.style.display != "none") {
       errorHandler.style.display = "flex";
+      
     }
 
     timmer.textContent = "00:00";
@@ -122,7 +153,7 @@ function getWords() {
     range.style.width = "0%";
 
     const len = wordLengthInput.value || 10;
-    if(len < 1 || len > 1000){
+    if (len < 1 || len > 1000) {
       errorMessage.innerHTML = "Words must be 1 to 1000";
       errorHandler.style.display = "flex";
       return;
@@ -130,10 +161,8 @@ function getWords() {
     let sentence = "";
     for (let i = 0; i < len; i++) {
       const index = Math.floor(Math.random() * 342);
-      console.log(`${Words.length} ${index}`);
       sentence += Words[index] + " ";
     }
-    console.log(sentence);
     originalText = sentence;
     renderCharacters(originalText.split(""));
     inputField.value = "";
@@ -144,7 +173,7 @@ function getWords() {
     prevLength = 0;
     correctnessArray = [];
   } catch (error) {
-    errorMessage.textContent = `Erro: ${error}`;
+    errorMessage.textContent = `${error}`;
     errorHandler.style.display = "flex";
   }
 }
@@ -153,8 +182,9 @@ getWords();
 
 
 function renderCharacters(chars) {
+  // stopTimmer();
   totalLength = chars.length;
-  const textSection = document.querySelector(".text-section");
+  // const textSection = document.querySelector(".text-section");
   charSpans = [];
 
   textSection.innerHTML = "";
@@ -169,16 +199,25 @@ let stack = [];
 
 function check(inputField) {
   const currLength = inputField.value.length;
+  if (currLength === 1) {
+    startTimmer();
+  } else if (currLength === 0) {
+    stopTimmer();
+  }
 
   if (currLength > prevLength) {
     const index = currLength - 1;
     prevLength = currLength;
-
     const inputChar = inputField.value.charAt(index);
     const originalChar = originalText.charAt(index);
     const span = charSpans[index];
 
+
+
     if (inputChar === originalChar) {
+
+      currentIndex = index;
+      updateActiveSpan();
       correctCount++;
       correctnessArray[index] = true;
       if (span) {
@@ -186,6 +225,8 @@ function check(inputField) {
         span.classList.remove("incorrect");
       }
     } else {
+      currentIndex = index;
+      updateActiveSpan();
       incorrectCount++;
       correctnessArray[index] = false;
       if (span) {
@@ -196,6 +237,8 @@ function check(inputField) {
   } else if (currLength < prevLength) {
     const index = currLength;
     const span = charSpans[index];
+    currentIndex = index;
+    updateActiveSpan();
 
     if (correctnessArray[index] === true) {
       correctCount--;
@@ -214,10 +257,16 @@ function check(inputField) {
 }
 
 
-
 inputField.addEventListener("input", () => {
   // Prevent multiple consecutive spaces
   inputField.value = inputField.value.replace(/ {2,}/g, " ");
+  const lastChar = inputField.value.charAt(inputField.value.length - 1); // ✅ FIXED
+
+  if (lastChar === " ") {
+    document.addEventListener("keydown", handleBackspace); // ✅ Only if not already added (optional improvement)
+  } else {
+    document.removeEventListener("keydown", handleBackspace);
+  }
 
   // Only allow typing at the end
   if (inputField.selectionStart !== inputField.value.length) {
@@ -227,27 +276,19 @@ inputField.addEventListener("input", () => {
     );
   }
 
-
   const totalTyped = correctCount + incorrectCount;
   if (totalTyped < totalLength - 2) {
     check(inputField);
   } else if (totalTyped <= totalLength - 2) {
-
-    if (stack.length > 1 && stack[stack.length - 1] === stack[stack.length - 2]) {
-      countWords++;
-    } else {
-      countWords++;
-    }
-
     check(inputField);
+    stopTimmer();
     result();
     test.innerHTML = ++testCount;
-    console.log("finished")
   } else {
+    stopTimmer();
     result();
   }
 });
-
 
 //TIMMER
 
@@ -266,6 +307,7 @@ function updateTime() {
     ${min.toString().padStart(2, 0)}:${secs.toString().padStart(2, 0)}
   `;
 }
+
 function startTimmer() {
   if (isRunning) return;
   isRunning = true;
@@ -275,8 +317,12 @@ function startTimmer() {
     updateTime();
   }, 1000);
 }
+
 function stopTimmer() {
   clearInterval(interval);
+  startTime = 0;
+  elapseTime = 0;
+  interval = 0;
   isRunning = false;
 }
 
@@ -287,13 +333,10 @@ function displayWpmAccuracy() {
   //for wpm
   const t = timmer.textContent.split(":");
   const min = ((Number(t[0]) * 60) + Number(t[1])) / 60;
-  if (min === 0) {
-    myWpm = (correctCount / (5 * 0.01));
-  } else {
-    myWpm = (correctCount / (5 * min));
-  }
 
-  console.log(`${myWpm} ${min}`)
+  const safeMin = min === 0 ? 0.01 : min;
+  myWpm = correctCount / (5 * safeMin);
+
   //for accuracy
   const totalCharLengths = correctCount + incorrectCount;
   acc = Math.round(((correctCount / totalCharLengths) * 100));
@@ -316,6 +359,43 @@ function ranging() {
   const performance = Math.round(performanceScore);
   range.style.width = `${performance}%`;
 }
+
+function updateActiveSpan() {
+  const prev = document.querySelector("span.active");
+  if (prev) prev.classList.remove("active");
+
+  const spans = document.querySelectorAll(".text-section span");
+  const nextSpan = spans[currentIndex];
+  if (nextSpan) {
+    nextSpan.classList.add("active");
+    console.log(`trigger in updateActiveSpan()`);
+    scrollToActiveChar();
+  }
+}
+
+function scrollToActiveChar() {
+  const container = textSection;
+  const activeSpan = container.querySelector("span.active");
+
+  if (!activeSpan) return;
+
+const spanTop = activeSpan.offsetTop;
+let spanBottom = spanTop + activeSpan.offsetHeight;
+
+  const containerTop = container.scrollTop;
+  const containerHeight = container.clientHeight;
+  const containerBottom = containerTop + containerHeight;
+console.log(`${spanBottom} ${containerBottom - containerHeight * 0.01}`);
+  if (spanBottom > containerBottom - containerHeight * 0.1) {
+    container.scrollTo({
+      top: spanTop - containerHeight * 0.3,
+      behavior: "smooth"
+    });
+    spanBottom += 80;
+    console.log(`active here`);
+  }
+}
+
 //RESULT
 function result() {
   stopTimmer();

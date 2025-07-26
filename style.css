@@ -5,7 +5,7 @@
   --primaryColor: #2e2e2e;
   --secondaryColor: #0b8ee5;
   --tertiaryColor: #119da4;
-  --fontFamily: "Poetsen One", sans-serif;
+  --fontFamily: Poppins, sans-serif;
 
   --background-color: hsl(281, 42%, 15%);
   --color: hsla(229, 42%, 36%, 0.613);
@@ -24,7 +24,7 @@ body {
   background-color: #102942;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   flex-direction: column;
   width: 80%;
   box-shadow: 0px 0px 20px #14141459;
@@ -40,11 +40,11 @@ body {
 }
 
 #app-name {
-  margin: 13px 0px 0px 0px;
+  margin: 0px;
   font-family: sans-serif;
   color: white;
   position: relative;
-  top: -5px;
+  top: 0px;
   font-size: 2rem;
   cursor: default;
 
@@ -71,35 +71,51 @@ body {
 }
 
 #desc {
-  margin: 0px 0px 10px 0px;
+  margin: 0px;
   font-size: 13px;
   font-family: Arial, Helvetica, sans-serif;
   color: #919191e8;
   position: relative;
-  top: 0px;
+  top: -7%;
   cursor: default;
 }
 
 .inner-one {
-  position: relative;
-  top: 16px;
-  border-radius: 12px;
-  height: 75%;
-  background-color: #07152c;
-  width: 94%;
-  box-shadow: 0px 0px 18px #0000002e;
+    position: relative;
+    top: -20%;
+    border-radius: 12px;
+    height: 60%;
+    background-color: #07152c;
+    width: 94%;
+    box-shadow: 0px 0px 18px #0000002e;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 
 .operations {
-  color: #ffffff8a;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  justify-content: space-between;
-  margin: 15px;
-  font-family: sans-serif;
-  font-size: 13px;
-  cursor: default;
+      display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: space-around;
+    font-family: sans-serif;
+    font-size: 13px;
+    cursor: default;
+    box-shadow: inset 0px 0px 6px black;
+    background-color: #002332b0;
+    padding: 7px;
+    margin: 4px 4px 16px;
+    border-radius: 10px;
+    font-weight: bold;
+    color: white;
+    position: relative;
+    width: 96%;
+    top: -2%;
+}
+
+.operations div {
+  text-shadow: 0px 0px 5px hsla(0, 0%, 100%, 0.326);
 }
 
 .operations div div {
@@ -118,6 +134,9 @@ body {
   border-radius: 10px;
   align-items: center;
   opacity: 1;
+  position: relative;
+  top: -5%;
+  box-shadow: inset 0px 0px 7px #00000099, 0px 0px 4px black;
 }
 
 .range {
@@ -128,6 +147,7 @@ body {
   border-radius: 15px;
   transform: translateX(1px);
   transition: width 0.5s ease-in-out;
+  box-shadow: inset 0px 0px 6px #000000;
   animation: moveGradient 5s ease-in-out infinite;
 }
 
@@ -139,19 +159,32 @@ body {
   white-space: nowrap;
 }
 
+/* $b: 1.5em;
+$blur: blur(9px);
+$rect: inset(0); */
+
 .text-section {
-  background-color: #07152c;
-  height: 40vh;
-  width: 95%;
-  margin: 0 auto;
-  overflow-y: scroll;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  font-size: 1.8rem;
-  font-family: sans-serif;
-  font-weight: bold;
-  color: #454444;
+    background-color: #07152c;
+    height: 22vh;
+    width: 95%;
+    margin: 0 auto;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    font-size: 1.8rem;
+    font-family: var(--fontFamily);
+    color: #4d4d4d;
+    line-height: 50px;
+    word-spacing: 5px;
+    position: relative;
+    top: -8%;
 }
+
+
+.text-section span.active {
+  box-shadow: 2px 0px 0px hsl(29, 100%, 50%);
+}
+
 
 .operationsTwo {
   color: #ffffff99;
@@ -166,9 +199,12 @@ body {
 
 .handleLength {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+    align-items: center;
+    justify-content: space-between;
+    width: 96%;
   cursor: default;
+  position: relative;
+  top: -5%;
 }
 
 .lengthOfParagraph input {
@@ -199,12 +235,12 @@ body {
 }
 
 .buttonsContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  z-index: 1;
-  position: relative;
-  top: -24px;
+      display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    z-index: 1;
+    position: relative;
+    top: -8%;
 }
 
 .buttonsContainer button {
@@ -260,13 +296,11 @@ body {
 
 
 .correct {
-  color: hsla(120, 100%, 57%, 0.801);
-  font-weight: bold;
+  color: hsla(0, 0%, 100%, 0.801);
 }
 
 .incorrect {
-  color: hsl(0, 100%, 50%);
-  font-weight: bold;
+  color: hsla(0, 100%, 50%, 0.674);
 }
 
 .errorMessage {
@@ -275,9 +309,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
 
-  /* Optional styling */
   background-color: #f44336;
-  /* red */
   color: white;
   padding: 20px 30px;
   border-radius: 10px;
@@ -309,14 +341,14 @@ body {
 }
 
 #warningHandler {
-  background-color: #1e092e;
   height: 19vh;
   width: 313px;
   position: absolute;
   top: 38%;
   border: 4px solid #8080805e;
   border-radius: 10px;
-
+  cursor: default;
+  background: linear-gradient(180deg, #102942 0%, #07152c 58%, #102942 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -325,6 +357,7 @@ body {
   color: #ffb929;
   font-weight: bold;
   word-wrap: break-word;
+  box-shadow: 0px 0px 7px #000000;
 }
 
 #cancel {

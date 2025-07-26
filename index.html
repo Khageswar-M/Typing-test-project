@@ -16,7 +16,7 @@
     <input type="text" id="test" autocomplete="off" />
     <div class="inner-one">
       <div class="operations">
-        <div class="timmer">Timer<br />
+        <div class="timmer">Time<br />
           <div class="time">00:00</div>
         </div>
         <div class="wpm">WPM<br />
@@ -37,21 +37,19 @@
         <div class="operationsTwo">
           <div class="lengthOfParagraph">
             Words:
-            <input type="number" id="wordLength" min="1" max="1000" value="10" autocomplete="off" />
+            <input type="number" id="wordLength" min="1" max="1000" value="250" autocomplete="off" />
           </div>
         </div>
       </div>
-      <div class="text-section">
+      <div class="text-section"></div>
 
+      <div class="buttonsContainer">
+        <button id="start" onclick="getWords()">Start</button>
       </div>
-
-    </div>
-    <div class="buttonsContainer">
-      <button id="start" onclick="getWords()">Start</button>
     </div>
   </div>
   <div id="warningHandler">
-    <p class="errorText">Warning</p>
+    <p class="errorText"></p>
     <div id="cancel">X</div>
   </div>
 
