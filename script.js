@@ -56,8 +56,10 @@ const wpm = document.querySelector(".wpms");
 const accuracy = document.querySelector(".accuracies");
 const test = document.querySelector(".testCount");
 
+const message = document.querySelector(".msg");
 const errorHandler = document.getElementById("warningHandler");
-const errorMessage = document.querySelector(".errorText");
+errorHandler.style.display = "none";
+// const errorMessage = document.querySelector(".errorText");
 const cancelHandler = document.getElementById("cancel");
 const start = document.getElementById("start");
 
@@ -69,7 +71,13 @@ const handleBackspace = (e) => {
     e.preventDefault();
   }
 };
-
+errorHandler.addEventListener("click", () => {
+  errorHandler.style.display = "none";
+});
+// message.addEventListener("click", () => {
+//   inputField.focus();
+//   message.style.display("none");
+// });
 document.addEventListener("keydown", (e) => {
   if (e.key === 'Enter' && document.activeElement === wordLengthInput) {
     startBtn.click();
@@ -99,9 +107,8 @@ document.addEventListener("keydown", (event) => {
 
   //Check wheather the input filed is focused or not
   if (inputField != document.activeElement) {
-    errorMessage.textContent = "Press Enter to focus";
-    if (errorHandler.style.display === "none") {
-      errorHandler.style.display = "flex";
+    if (message.style.display === "none") {
+      message.style.display = "flex";
     }
   }
 
@@ -123,7 +130,7 @@ document.addEventListener("keydown", (event) => {
   if (event.key === 'Enter') {
 
     if (isStartFocused) {
-      errorHandler.style.display = "none";
+      message.style.display = "none";
       inputField.focus();
       start.click();
       stopTimmer();
@@ -131,7 +138,7 @@ document.addEventListener("keydown", (event) => {
     }
 
 
-    errorHandler.style.display = "none";
+    message.style.display = "none";
     inputField.focus();
 
   }
@@ -140,11 +147,12 @@ document.addEventListener("keydown", (event) => {
     event.preventDefault();
     tabFocused = true;
     start.focus();
+    start.style.opacity = "1";
   }
 });
 
 cancelHandler.addEventListener("click", () => {
-  errorHandler.style.display = "none";
+  message.style.display = "none";
 });
 
 let correctCount = 0;
@@ -161,9 +169,8 @@ let allWords = 0;
 
 function getWords() {
   try {
-    errorMessage.innerHTML = "Press Enter to focus";
-    if (errorHandler.style.display != "none") {
-      errorHandler.style.display = "flex";
+    if (message.style.display != "none") {
+      message.style.display = "flex";
 
     }
 
@@ -174,8 +181,12 @@ function getWords() {
 
     const len = wordLengthInput.value || 10;
     if (len < 1 || len > 1000) {
-      errorMessage.innerHTML = "Words must be 1 to 1000";
+      wordLengthInput.value = "25";
+      errorHandler.innerHTML = "Words must be 1 to 1000";
       errorHandler.style.display = "flex";
+      setTimeout(() => {
+        errorHandler.style.display = "none";
+      }, 3000);
       return;
     }
     let sentence = "";
@@ -193,7 +204,7 @@ function getWords() {
     prevLength = 0;
     correctnessArray = [];
   } catch (error) {
-    errorMessage.textContent = `${error}`;
+    errorHandler.textContent = `${error}`;
     errorHandler.style.display = "flex";
   }
 }
@@ -383,11 +394,38 @@ function ranging() {
 
   const performance = Math.round(performanceScore);
   range.style.width = `${performance}%`;
+  
+  
+  errorHandler.style.backgroundColor = "green";
+  errorHandler.style.fontSize = "2rem";
+  
+  switch(true){
+    case (performance >= 1 && performance <= 20):
+      errorHandler.textContent = "Beginner";
+      break;
+    case(performance > 20 && performance <= 40):
+      errorHandler.textContent = "Improving";
+      break;
+    case(performance > 40 && performance <= 60):
+      errorHandler.textContent = "Competent";
+      break;
+    case(performance > 60 && performance <= 80):
+      errorHandler.textContent = "Proficient";
+      break;
+    case(performance > 80):
+      errorHandler.textContent = "Mastery"; 
+      break;
+    default:
+      errorHandler.textContent = "Error";
+  }
+  errorHandler.style.display = "flex";
+  setTimeout(() => {
+    errorHandler.style.display = "none";
+  }, 3000);
 }
 
 function updateActiveSpan(binary) {
   const spans = document.querySelectorAll(".text-section span");
-  // spans.clasList.add("noBlink");
   // Boundary check
   if (currentIndex < 0 || currentIndex >= spans.length) return;
 

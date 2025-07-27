@@ -319,7 +319,6 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
   background-color: #f44336;
   color: white;
   padding: 20px 30px;
@@ -344,6 +343,22 @@ body {
   display: none;
 }
 
+.msg{ 
+     height: 25vh;
+    width: 73%;
+    background-color: hsl(0deg 0% 50.2% / 0%);
+    position: absolute;
+    transform: translateY(10%);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    font-family: var(--fontFamily);
+  }
+
+
 .word {
   font-size: 2rem;
   color: #616161e8;
@@ -353,22 +368,36 @@ body {
 
 #warningHandler {
   height: 19vh;
-  width: 313px;
+  min-width: 25%;
   position: absolute;
-  top: 38%;
-  border: 4px solid #8080805e;
+  border: 4px solid #808080a5;
   border-radius: 10px;
   cursor: default;
-  background: linear-gradient(180deg, #102942 0%, #07152c 58%, #102942 100%);
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   font-size: 1.5rem;
   font-family: verdana, Arial;
-  color: #ffb929;
-  font-weight: bold;
+  color: #ffffff;
   word-wrap: break-word;
   box-shadow: 0px 0px 7px #000000;
+  right: 3%;
+  top: 5%;
+  background-color: hsl(0, 87%, 36%);
+  animation: errorComes 0.2s ease;
+}
+#warningHandler:hover{
+  background-color: hsl(0, 87%, 26%);
+  transition: background-color 0.2s ease;
+}
+@keyframes errorComes{
+  0%{
+    top: 0%;
+  }
+  100%{
+    top: 5%;
+  }
 }
 
 #cancel {
