@@ -159,7 +159,7 @@ body {
 }
 
 .text-section {
-    background-color: #07152c;
+    /* background-color: #07152c; */
     height: 22vh;
     width: 95%;
     margin: 0 auto;

@@ -66,11 +66,6 @@ const start = document.getElementById("start");
 let testCount = 0;
 test.innerHTML = testCount;
 
-// const handleBackspace = (e) => {
-//   if (e.key === 'Backspace') {
-//     e.preventDefault();
-//   }
-// };
 errorHandler.addEventListener("click", () => {
   errorHandler.style.display = "none";
 });
@@ -89,6 +84,12 @@ document.addEventListener("keydown", (event) => {
     [wpm, accuracy, test].forEach(wat => {
       wat.style.opacity = "0";
     });
+
+    
+    document.querySelector(".element-container").style.backgroundColor = "#07152c";
+    document.querySelector(".inner-one").style.backgroundColor = "#102942";
+
+
     startBtn.style.opacity = "0";
     appName.style.setProperty("-webkit-text-fill-color", "white");
     document.documentElement.addEventListener("mousemove", () => {
@@ -98,6 +99,8 @@ document.addEventListener("keydown", (event) => {
         startBtn.style.opacity = "1";
         appName.style.setProperty("-webkit-text-fill-color", "transparent");
       });
+      document.querySelector(".element-container").style.backgroundColor = "#102942";
+    document.querySelector(".inner-one").style.backgroundColor = "#07152c";
     });
   }
 
@@ -219,7 +222,6 @@ function renderCharacters(chars) {
     span.textContent = ch;
 
     if (index == 0) {
-      // console.log(span);
       span.classList.add("backward");
     }
 
@@ -258,7 +260,7 @@ function check(inputField) {
     if (inputChar === originalChar) {
       span.style.backgroundColor = "transparent";
       document.removeEventListener("keydown", handleBackspace);    
-  
+      
       currentIndex = index;
       correctCount++;
       correctnessArray[index] = true;
@@ -267,6 +269,7 @@ function check(inputField) {
         span.classList.add("correct");
         span.classList.remove("incorrect");
       }
+      
     } else {
       currentIndex = index;
       incorrectCount++;
@@ -309,15 +312,6 @@ inputField.addEventListener("input", () => {
   // Prevent multiple consecutive spaces
   inputField.value = inputField.value.replace(/ {2,}/g, " ");
   const lastChar = inputField.value.charAt(inputField.value.length - 1);
-
-  // if (lastChar === " ") {
-  //   // document.addEventListener("keydown", handleBackspace);
-  //   handleBackspace();
-
-  // }
-  //  else {
-  //   document.removeEventListener("keydown", handleBackspace);
-  // }
 
   // Only allow typing at the end
   if (inputField.selectionStart !== inputField.value.length) {
@@ -472,7 +466,6 @@ function scrollToActiveChar() {
   const containerTop = container.scrollTop;
   const containerHeight = container.clientHeight;
   const containerBottom = containerTop + containerHeight;
-  // console.log(`${spanBottom} ${containerBottom - containerHeight * 0.1}`)
   if (spanBottom > containerBottom - containerHeight * 0.1) {
     container.scrollTo({
       top: spanTop - containerHeight * 0.3,
@@ -484,6 +477,8 @@ function scrollToActiveChar() {
 
 //RESULT
 function result() {
+  document.querySelector(".element-container").style.backgroundColor = "#102942";
+    document.querySelector(".inner-one").style.backgroundColor = "#07152c";
   stopTimmer();
   inputField.blur();
   displayWpmAccuracy();
@@ -495,5 +490,6 @@ function result() {
     startBtn.style.opacity = "1";
   });
   startBtn.innerHTML = "Test Again";
+  getWords();
 
 }
