@@ -66,18 +66,14 @@ const start = document.getElementById("start");
 let testCount = 0;
 test.innerHTML = testCount;
 
-const handleBackspace = (e) => {
-  if (e.key === 'Backspace') {
-    e.preventDefault();
-  }
-};
+// const handleBackspace = (e) => {
+//   if (e.key === 'Backspace') {
+//     e.preventDefault();
+//   }
+// };
 errorHandler.addEventListener("click", () => {
   errorHandler.style.display = "none";
 });
-// message.addEventListener("click", () => {
-//   inputField.focus();
-//   message.style.display("none");
-// });
 document.addEventListener("keydown", (e) => {
   if (e.key === 'Enter' && document.activeElement === wordLengthInput) {
     startBtn.click();
@@ -88,7 +84,7 @@ document.addEventListener("keydown", (e) => {
 let tabFocused = false;
 document.addEventListener("keydown", (event) => {
 
-  if(inputField === document.activeElement){
+  if (inputField === document.activeElement) {
     document.documentElement.classList.add("hideCursor");
     [wpm, accuracy, test].forEach(wat => {
       wat.style.opacity = "0";
@@ -98,10 +94,10 @@ document.addEventListener("keydown", (event) => {
     document.documentElement.addEventListener("mousemove", () => {
       document.documentElement.classList.remove("hideCursor");
       [wpm, accuracy, test].forEach(wat => {
-      wat.style.opacity = "1";
-      startBtn.style.opacity = "1";
-      appName.style.setProperty("-webkit-text-fill-color", "transparent");
-    });
+        wat.style.opacity = "1";
+        startBtn.style.opacity = "1";
+        appName.style.setProperty("-webkit-text-fill-color", "transparent");
+      });
     });
   }
 
@@ -215,14 +211,14 @@ getWords();
 function renderCharacters(chars) {
   totalLength = chars.length;
 
-  charSpans = []; 
+  charSpans = [];
 
   textSection.innerHTML = "";
   chars.forEach((ch, index) => {
     const span = document.createElement("span");
     span.textContent = ch;
 
-    if(index == 0){
+    if (index == 0) {
       // console.log(span);
       span.classList.add("backward");
     }
@@ -232,7 +228,14 @@ function renderCharacters(chars) {
   });
 }
 let stack = [];
-
+function handleBackspace(e){
+  if(e.key === 'Backspace'){
+    e.preventDefault();
+  }
+}
+function handleKey(e){
+  e.preventDefault();
+}
 function check(inputField) {
   const currLength = inputField.value.length;
   if (currLength === 1) {
@@ -247,11 +250,15 @@ function check(inputField) {
     const inputChar = inputField.value.charAt(index);
     const originalChar = originalText.charAt(index);
     const span = charSpans[index];
-
-
+    
+    if(originalChar === " " && inputChar !== " "){
+      span.style.backgroundColor = "hsla(0, 100%, 50%, 0.218)";
+    }
 
     if (inputChar === originalChar) {
-
+      span.style.backgroundColor = "transparent";
+      document.removeEventListener("keydown", handleBackspace);    
+  
       currentIndex = index;
       correctCount++;
       correctnessArray[index] = true;
@@ -275,6 +282,11 @@ function check(inputField) {
     const span = charSpans[index];
     currentIndex = index;
 
+    if(originalText.charAt(index) === " "){
+      console.log("lower");
+        document.addEventListener("keydown", handleBackspace);
+      }
+
     if (correctnessArray[index] === true) {
       correctCount--;
     } else if (correctnessArray[index] === false) {
@@ -296,13 +308,16 @@ function check(inputField) {
 inputField.addEventListener("input", () => {
   // Prevent multiple consecutive spaces
   inputField.value = inputField.value.replace(/ {2,}/g, " ");
-  const lastChar = inputField.value.charAt(inputField.value.length - 1); // ✅ FIXED
+  const lastChar = inputField.value.charAt(inputField.value.length - 1);
 
-  if (lastChar === " ") {
-    document.addEventListener("keydown", handleBackspace); // ✅ Only if not already added (optional improvement)
-  } else {
-    document.removeEventListener("keydown", handleBackspace);
-  }
+  // if (lastChar === " ") {
+  //   // document.addEventListener("keydown", handleBackspace);
+  //   handleBackspace();
+
+  // }
+  //  else {
+  //   document.removeEventListener("keydown", handleBackspace);
+  // }
 
   // Only allow typing at the end
   if (inputField.selectionStart !== inputField.value.length) {
@@ -394,26 +409,26 @@ function ranging() {
 
   const performance = Math.round(performanceScore);
   range.style.width = `${performance}%`;
-  
-  
+
+
   errorHandler.style.backgroundColor = "green";
   errorHandler.style.fontSize = "2rem";
-  
-  switch(true){
+
+  switch (true) {
     case (performance >= 1 && performance <= 20):
       errorHandler.textContent = "Beginner";
       break;
-    case(performance > 20 && performance <= 40):
+    case (performance > 20 && performance <= 40):
       errorHandler.textContent = "Improving";
       break;
-    case(performance > 40 && performance <= 60):
+    case (performance > 40 && performance <= 60):
       errorHandler.textContent = "Competent";
       break;
-    case(performance > 60 && performance <= 80):
+    case (performance > 60 && performance <= 80):
       errorHandler.textContent = "Proficient";
       break;
-    case(performance > 80):
-      errorHandler.textContent = "Mastery"; 
+    case (performance > 80):
+      errorHandler.textContent = "Mastery";
       break;
     default:
       errorHandler.textContent = "Error";
@@ -448,7 +463,7 @@ function updateActiveSpan(binary) {
 function scrollToActiveChar() {
   const container = textSection;
   const activeSpan = container.querySelector("span.active");
-  
+
   if (!activeSpan) return;
 
   const spanTop = activeSpan.offsetTop;
@@ -474,10 +489,10 @@ function result() {
   displayWpmAccuracy();
   ranging();
   document.documentElement.classList.remove("hideCursor");
-      [wpm, accuracy, test].forEach(wat => {
-      wat.style.opacity = "1";
-      appName.style.setProperty("-webkit-text-fill-color", "transparent");
-      startBtn.style.opacity = "1";
+  [wpm, accuracy, test].forEach(wat => {
+    wat.style.opacity = "1";
+    appName.style.setProperty("-webkit-text-fill-color", "transparent");
+    startBtn.style.opacity = "1";
   });
   startBtn.innerHTML = "Test Again";
 
