@@ -44,6 +44,7 @@ const Words = [
 
 let originalText = "";
 let charSpans = [];
+const appName = document.getElementById("app-name");
 const textSection = document.querySelector(".text-section");
 const wordLengthInput = document.getElementById("wordLength");
 const inputField = document.getElementById("test");
@@ -63,22 +64,43 @@ const start = document.getElementById("start");
 let testCount = 0;
 test.innerHTML = testCount;
 
-
-
 const handleBackspace = (e) => {
   if (e.key === 'Backspace') {
     e.preventDefault();
   }
 };
 
+document.addEventListener("keydown", (e) => {
+  if (e.key === 'Enter' && document.activeElement === wordLengthInput) {
+    startBtn.click();
+  }
+});
+
+
 let tabFocused = false;
 document.addEventListener("keydown", (event) => {
 
+  if(inputField === document.activeElement){
+    document.documentElement.classList.add("hideCursor");
+    [wpm, accuracy, test].forEach(wat => {
+      wat.style.opacity = "0";
+    });
+    startBtn.style.opacity = "0";
+    appName.style.setProperty("-webkit-text-fill-color", "white");
+    document.documentElement.addEventListener("mousemove", () => {
+      document.documentElement.classList.remove("hideCursor");
+      [wpm, accuracy, test].forEach(wat => {
+      wat.style.opacity = "1";
+      startBtn.style.opacity = "1";
+      appName.style.setProperty("-webkit-text-fill-color", "transparent");
+    });
+    });
+  }
 
   //Check wheather the input filed is focused or not
-  if(inputField != document.activeElement){
+  if (inputField != document.activeElement) {
     errorMessage.textContent = "Press Enter to focus";
-    if(errorHandler.style.display === "none"){
+    if (errorHandler.style.display === "none") {
       errorHandler.style.display = "flex";
     }
   }
@@ -110,20 +132,18 @@ document.addEventListener("keydown", (event) => {
 
 
     errorHandler.style.display = "none";
-    // start.click();
     inputField.focus();
 
   }
 
   if (event.key === 'Tab') {
     event.preventDefault();
-    // stopTimmer();
     tabFocused = true;
     start.focus();
   }
 });
 
-cancelHandler.addEventListener("click" , () => {
+cancelHandler.addEventListener("click", () => {
   errorHandler.style.display = "none";
 });
 
@@ -144,7 +164,7 @@ function getWords() {
     errorMessage.innerHTML = "Press Enter to focus";
     if (errorHandler.style.display != "none") {
       errorHandler.style.display = "flex";
-      
+
     }
 
     timmer.textContent = "00:00";
@@ -182,15 +202,20 @@ getWords();
 
 
 function renderCharacters(chars) {
-  // stopTimmer();
   totalLength = chars.length;
-  // const textSection = document.querySelector(".text-section");
-  charSpans = [];
+
+  charSpans = []; 
 
   textSection.innerHTML = "";
-  chars.forEach((ch) => {
+  chars.forEach((ch, index) => {
     const span = document.createElement("span");
     span.textContent = ch;
+
+    if(index == 0){
+      // console.log(span);
+      span.classList.add("backward");
+    }
+
     textSection.appendChild(span);
     charSpans.push(span);
   });
@@ -217,19 +242,19 @@ function check(inputField) {
     if (inputChar === originalChar) {
 
       currentIndex = index;
-      updateActiveSpan();
       correctCount++;
       correctnessArray[index] = true;
       if (span) {
+        updateActiveSpan(1);
         span.classList.add("correct");
         span.classList.remove("incorrect");
       }
     } else {
       currentIndex = index;
-      updateActiveSpan();
       incorrectCount++;
       correctnessArray[index] = false;
       if (span) {
+        updateActiveSpan(1);
         span.classList.add("incorrect");
         span.classList.remove("correct");
       }
@@ -238,7 +263,6 @@ function check(inputField) {
     const index = currLength;
     const span = charSpans[index];
     currentIndex = index;
-    updateActiveSpan();
 
     if (correctnessArray[index] === true) {
       correctCount--;
@@ -248,6 +272,7 @@ function check(inputField) {
 
     if (span) {
       span.classList.remove("correct", "incorrect");
+      updateActiveSpan(0);
     }
 
     correctnessArray.splice(index, 1);
@@ -360,39 +385,47 @@ function ranging() {
   range.style.width = `${performance}%`;
 }
 
-function updateActiveSpan() {
-  const prev = document.querySelector("span.active");
-  if (prev) prev.classList.remove("active");
-
+function updateActiveSpan(binary) {
   const spans = document.querySelectorAll(".text-section span");
+  // spans.clasList.add("noBlink");
+  // Boundary check
+  if (currentIndex < 0 || currentIndex >= spans.length) return;
+
+  // Remove previous forward/backward classes
+  document.querySelectorAll("span.forward, span.backward").forEach(span =>
+    span.classList.remove("forward", "backward")
+  );
+
   const nextSpan = spans[currentIndex];
   if (nextSpan) {
-    nextSpan.classList.add("active");
-    console.log(`trigger in updateActiveSpan()`);
+    // console.log("hit");
+    nextSpan.classList.add(binary === 0 ? "backward" : "forward");
+    nextSpan.scrollIntoView({ behavior: "smooth", block: "center" });
+    nextSpan.classList.add("noBlink");
     scrollToActiveChar();
   }
 }
 
+
 function scrollToActiveChar() {
   const container = textSection;
   const activeSpan = container.querySelector("span.active");
-
+  
   if (!activeSpan) return;
 
-const spanTop = activeSpan.offsetTop;
-let spanBottom = spanTop + activeSpan.offsetHeight;
+  const spanTop = activeSpan.offsetTop;
+  let spanBottom = spanTop + activeSpan.offsetHeight;
 
   const containerTop = container.scrollTop;
   const containerHeight = container.clientHeight;
   const containerBottom = containerTop + containerHeight;
-console.log(`${spanBottom} ${containerBottom - containerHeight * 0.01}`);
+  // console.log(`${spanBottom} ${containerBottom - containerHeight * 0.1}`)
   if (spanBottom > containerBottom - containerHeight * 0.1) {
     container.scrollTo({
       top: spanTop - containerHeight * 0.3,
       behavior: "smooth"
     });
     spanBottom += 80;
-    console.log(`active here`);
   }
 }
 
@@ -402,6 +435,12 @@ function result() {
   inputField.blur();
   displayWpmAccuracy();
   ranging();
+  document.documentElement.classList.remove("hideCursor");
+      [wpm, accuracy, test].forEach(wat => {
+      wat.style.opacity = "1";
+      appName.style.setProperty("-webkit-text-fill-color", "transparent");
+      startBtn.style.opacity = "1";
+  });
   startBtn.innerHTML = "Test Again";
 
 }
