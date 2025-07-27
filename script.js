@@ -162,7 +162,7 @@ let currentIndex = 0;
 let countWords = 0;
 
 let allWords = 0;
-
+let myWpmis = 0;
 
 
 
@@ -388,6 +388,7 @@ function displayWpmAccuracy() {
   const myAccuracy = `${acc}%`;
 
   wpm.textContent = myWpm.toFixed(0);
+  myWpmis = myWpm.toFixed(0);
   accuracy.textContent = myAccuracy;
 
 }
@@ -411,21 +412,27 @@ function ranging() {
   switch (true) {
     case (performance >= 1 && performance <= 20):
       errorHandler.textContent = "Beginner";
+      createCard("Beginner");
       break;
     case (performance > 20 && performance <= 40):
       errorHandler.textContent = "Improving";
+      createCard("Improving");
       break;
     case (performance > 40 && performance <= 60):
       errorHandler.textContent = "Competent";
+      createCard("Competent");
       break;
     case (performance > 60 && performance <= 80):
       errorHandler.textContent = "Proficient";
+      createCard("Proficient");
       break;
     case (performance > 80):
       errorHandler.textContent = "Mastery";
+      createCard("Mastery");
       break;
     default:
       errorHandler.textContent = "Error";
+      createCard("Error");
   }
   errorHandler.style.display = "flex";
   setTimeout(() => {
@@ -490,6 +497,40 @@ function result() {
     startBtn.style.opacity = "1";
   });
   startBtn.innerHTML = "Test Again";
-  getWords();
+  // getWords();
 
+}
+let count = 0;
+function createCard(feedback){
+  const cardContainer = document.querySelector(".testResult");
+
+  const card = document.createElement("div");
+  const tested = document.createElement("p");
+  const wpmis = document.createElement("h3");
+  const feedbackis = document.createElement("p");
+
+  tested.textContent = `Test: ${++count}`;
+  tested.style.color = "white";
+
+  wpmis.textContent = `WPM: ${myWpmis}`;
+  wpmis.style.color = "white";
+  wpmis.style.fontSize = "1rem";
+
+  feedbackis.textContent = feedback;
+  feedbackis.style.color = "gray";
+
+  console.log(`${ tested.textContent} ${ wpmis.textContent} ${feedbackis.textContent}`)
+
+  card.classList.add("card");
+  card.appendChild(tested);
+  card.appendChild(wpmis);
+  card.appendChild(feedbackis);
+  
+  cardContainer.appendChild(card);
+
+
+  cardContainer.scrollTo({
+    left: cardContainer.scrollWidth,
+    behavior: "smooth"
+  });
 }
