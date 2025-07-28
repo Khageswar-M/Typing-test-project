@@ -79,6 +79,10 @@ document.addEventListener("keydown", (e) => {
 let tabFocused = false;
 document.addEventListener("keydown", (event) => {
 
+  if (event.ctrlKey && event.key.toLowerCase() === "a") {
+    event.preventDefault();
+  }
+
   if (inputField === document.activeElement) {
     document.documentElement.classList.add("hideCursor");
     [wpm, accuracy, test].forEach(wat => {
