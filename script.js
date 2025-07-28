@@ -59,9 +59,9 @@ const test = document.querySelector(".testCount");
 const message = document.querySelector(".msg");
 const errorHandler = document.getElementById("warningHandler");
 errorHandler.style.display = "none";
-// const errorMessage = document.querySelector(".errorText");
 const cancelHandler = document.getElementById("cancel");
 const start = document.getElementById("start");
+const cardContainer = document.querySelector(".testResult");
 
 let testCount = 0;
 test.innerHTML = testCount;
@@ -71,15 +71,14 @@ errorHandler.addEventListener("click", () => {
 });
 document.addEventListener("keydown", (e) => {
   if (e.key === 'Enter' && document.activeElement === wordLengthInput) {
-    if(wordLengthInput.value === ""){
+    if (wordLengthInput.value === "") {
       wordLengthInput.value = "25";
-    }else{
+    } else {
       startBtn.click();
     }
   }
 });
-
-
+let cardDisplay = true;
 let tabFocused = false;
 document.addEventListener("keydown", (event) => {
 
@@ -93,13 +92,14 @@ document.addEventListener("keydown", (event) => {
       wat.style.opacity = "0";
     });
 
-    
+    cardDisplay = false;
     document.querySelector(".element-container").style.backgroundColor = "#07152c";
     document.querySelector(".inner-one").style.backgroundColor = "#102942";
-
+    createCard("", false);
 
     startBtn.style.opacity = "0";
     appName.style.setProperty("-webkit-text-fill-color", "white");
+
     document.documentElement.addEventListener("mousemove", () => {
       document.documentElement.classList.remove("hideCursor");
       [wpm, accuracy, test].forEach(wat => {
@@ -108,7 +108,9 @@ document.addEventListener("keydown", (event) => {
         appName.style.setProperty("-webkit-text-fill-color", "transparent");
       });
       document.querySelector(".element-container").style.backgroundColor = "#102942";
-    document.querySelector(".inner-one").style.backgroundColor = "#07152c";
+      document.querySelector(".inner-one").style.backgroundColor = "#07152c";
+      cardDisplay = true;
+      createCard("", true);
     });
   }
 
@@ -239,12 +241,12 @@ function renderCharacters(chars) {
   });
 }
 let stack = [];
-function handleBackspace(e){
-  if(e.key === 'Backspace'){
+function handleBackspace(e) {
+  if (e.key === 'Backspace') {
     e.preventDefault();
   }
 }
-function handleKey(e){
+function handleKey(e) {
   e.preventDefault();
 }
 function check(inputField) {
@@ -261,15 +263,15 @@ function check(inputField) {
     const inputChar = inputField.value.charAt(index);
     const originalChar = originalText.charAt(index);
     const span = charSpans[index];
-    
-    if(originalChar === " " && inputChar !== " "){
+
+    if (originalChar === " " && inputChar !== " ") {
       span.style.backgroundColor = "hsla(0, 100%, 50%, 0.218)";
     }
 
     if (inputChar === originalChar) {
       span.style.backgroundColor = "transparent";
-      document.removeEventListener("keydown", handleBackspace);    
-      
+      document.removeEventListener("keydown", handleBackspace);
+
       currentIndex = index;
       correctCount++;
       correctnessArray[index] = true;
@@ -278,7 +280,7 @@ function check(inputField) {
         span.classList.add("correct");
         span.classList.remove("incorrect");
       }
-      
+
     } else {
       currentIndex = index;
       incorrectCount++;
@@ -294,10 +296,9 @@ function check(inputField) {
     const span = charSpans[index];
     currentIndex = index;
 
-    if(originalText.charAt(index) === " "){
-      console.log("lower");
-        document.addEventListener("keydown", handleBackspace);
-      }
+    if (originalText.charAt(index) === " ") {
+      document.addEventListener("keydown", handleBackspace);
+    }
 
     if (correctnessArray[index] === true) {
       correctCount--;
@@ -421,23 +422,28 @@ function ranging() {
   switch (true) {
     case (performance >= 1 && performance <= 20):
       errorHandler.textContent = "Beginner";
-      createCard("Beginner");
+      // createCard("Beginner");
+      createCard("Beginner", true);
       break;
     case (performance > 20 && performance <= 40):
       errorHandler.textContent = "Improving";
-      createCard("Improving");
+      // createCard("Improving");
+      createCard("Improving", true);
       break;
     case (performance > 40 && performance <= 60):
       errorHandler.textContent = "Competent";
-      createCard("Competent");
+      // createCard("Competent");
+      createCard("Competent", true);
       break;
     case (performance > 60 && performance <= 80):
       errorHandler.textContent = "Proficient";
-      createCard("Proficient");
+      // createCard("Proficient");
+      createCard("Proficient", true);
       break;
     case (performance > 80):
       errorHandler.textContent = "Mastery";
-      createCard("Mastery");
+      // createCard("Mastery");
+      createCard("Mastery", true);
       break;
     default:
       errorHandler.textContent = "Error";
@@ -461,7 +467,6 @@ function updateActiveSpan(binary) {
 
   const nextSpan = spans[currentIndex];
   if (nextSpan) {
-    // console.log("hit");
     nextSpan.classList.add(binary === 0 ? "backward" : "forward");
     nextSpan.scrollIntoView({ behavior: "smooth", block: "center" });
     nextSpan.classList.add("noBlink");
@@ -494,7 +499,7 @@ function scrollToActiveChar() {
 //RESULT
 function result() {
   document.querySelector(".element-container").style.backgroundColor = "#102942";
-    document.querySelector(".inner-one").style.backgroundColor = "#07152c";
+  document.querySelector(".inner-one").style.backgroundColor = "#07152c";
   stopTimmer();
   inputField.blur();
   displayWpmAccuracy();
@@ -510,34 +515,44 @@ function result() {
 
 }
 let count = 0;
-function createCard(feedback){
-  const cardContainer = document.querySelector(".testResult");
-
-  const card = document.createElement("div");
-  const tested = document.createElement("p");
-  const wpmis = document.createElement("h3");
-  const feedbackis = document.createElement("p");
-
-  tested.textContent = `Test: ${++count}`;
-  tested.style.color = "white";
-
-  wpmis.textContent = `WPM: ${myWpmis}`;
-  wpmis.style.color = "white";
-  wpmis.style.fontSize = "1rem";
-
-  feedbackis.textContent = feedback;
-  feedbackis.style.color = "gray";
-
-  card.classList.add("card");
-  card.appendChild(tested);
-  card.appendChild(wpmis);
-  card.appendChild(feedbackis);
+function createCard(feedback, isCardDisplay) {
   
-  cardContainer.appendChild(card);
+  if (feedback != "") {
 
+    const card = document.createElement("div");
+    const tested = document.createElement("p");
+    const wpmis = document.createElement("h3");
+    const feedbackis = document.createElement("p");
+
+    tested.textContent = `Test: ${++count}`;
+    tested.style.color = "white";
+
+    wpmis.textContent = `WPM: ${myWpmis}`;
+    wpmis.style.color = "white";
+    wpmis.style.fontSize = "1rem";
+
+    feedbackis.textContent = feedback;
+    feedbackis.style.color = "gray";
+
+    card.classList.add("card");
+    card.appendChild(tested);
+    card.appendChild(wpmis);
+    card.appendChild(feedbackis);
+
+    cardContainer.appendChild(card);
+  }
+
+
+  if (isCardDisplay) {
+    cardContainer.style.display = "flex";
+  } else {
+    cardContainer.style.display = "none";
+  }
+  
 
   cardContainer.scrollTo({
     left: cardContainer.scrollWidth,
     behavior: "smooth"
   });
+
 }

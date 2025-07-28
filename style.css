@@ -467,7 +467,7 @@ body {
     position: relative;
     height: 94%;
     width: 120px;
-    background-color: #07152c;
+    background-color: hsl(216, 74%, 15%);
     margin: 3px;
     border-radius: 10px;
     flex: 0 0 auto;
@@ -478,7 +478,13 @@ body {
     align-items: center;
     justify-content: space-evenly;
     flex-direction: column;
+    cursor: default;
 }
+
+.card:hover{
+  background-color: hsl(216, 74%, 17%);
+}
+
 .card *{
   margin: 0px;
 }
