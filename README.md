@@ -19,3 +19,5 @@ You get instant feedback on typos, typing speed, and accuracy in a straightforwa
   <li>Real time test result history save</li>
   <li>And much more</li>
 </ul>
+<h1>Version</h1>
+<p>🏷️ 1.0.0</p>
