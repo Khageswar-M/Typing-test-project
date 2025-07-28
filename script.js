@@ -71,7 +71,11 @@ errorHandler.addEventListener("click", () => {
 });
 document.addEventListener("keydown", (e) => {
   if (e.key === 'Enter' && document.activeElement === wordLengthInput) {
-    startBtn.click();
+    if(wordLengthInput.value === ""){
+      wordLengthInput.value = "25";
+    }else{
+      startBtn.click();
+    }
   }
 });
 
@@ -523,8 +527,6 @@ function createCard(feedback){
 
   feedbackis.textContent = feedback;
   feedbackis.style.color = "gray";
-
-  // console.log(`${ tested.textContent} ${ wpmis.textContent} ${feedbackis.textContent}`)
 
   card.classList.add("card");
   card.appendChild(tested);
