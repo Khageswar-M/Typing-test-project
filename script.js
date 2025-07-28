@@ -65,7 +65,7 @@ const start = document.getElementById("start");
 
 let testCount = 0;
 test.innerHTML = testCount;
-
+appName.addEventListener("click", () => getWords());
 errorHandler.addEventListener("click", () => {
   errorHandler.style.display = "none";
 });
@@ -183,6 +183,7 @@ function getWords() {
       wordLengthInput.value = "25";
       errorHandler.innerHTML = "Words must be 1 to 1000";
       errorHandler.style.display = "flex";
+      // errorHandler.style.backgroundColor = "red";
       setTimeout(() => {
         errorHandler.style.display = "none";
       }, 3000);
@@ -406,7 +407,7 @@ function ranging() {
   range.style.width = `${performance}%`;
 
 
-  errorHandler.style.backgroundColor = "green";
+  // errorHandler.style.backgroundColor = "green";
   errorHandler.style.fontSize = "2rem";
 
   switch (true) {
@@ -519,7 +520,7 @@ function createCard(feedback){
   feedbackis.textContent = feedback;
   feedbackis.style.color = "gray";
 
-  console.log(`${ tested.textContent} ${ wpmis.textContent} ${feedbackis.textContent}`)
+  // console.log(`${ tested.textContent} ${ wpmis.textContent} ${feedbackis.textContent}`)
 
   card.classList.add("card");
   card.appendChild(tested);

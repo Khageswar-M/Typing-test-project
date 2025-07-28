@@ -401,22 +401,25 @@ body {
   box-shadow: 0px 0px 7px #000000;
   right: 3%;
   top: 5%;
-  background-color: hsl(0, 87%, 36%);
+  /* background-color: hsl(0, 87%, 36%); */
   animation: errorComes 0.2s ease;
+  backdrop-filter: blur(5px);
 }
 
 #warningHandler:hover {
-  background-color: hsl(0, 87%, 26%);
+  backdrop-filter: blur(7px);
   transition: background-color 0.2s ease;
 }
 
 @keyframes errorComes {
   0% {
     top: 0%;
+    opacity: 0;
   }
 
   100% {
     top: 5%;
+    opacity: 1;
   }
 }
 
@@ -485,7 +488,42 @@ body {
 }
 
 .instruction span{
-  background-color: #7878783b;
+  background-color: hsl(0deg 0% 50% / 28%);
   padding: 0px 4px;
   border-radius: 5px;
+}
+
+.about{
+  color: white;
+    position: absolute;
+    top: 6%;
+    right: 13%;
+    font-family: var(--fontFamily);
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+}
+.about:hover{
+  color: orange;
+}
+.about:active{
+  color: hsl(39, 95%, 75%);
+}
+.socialIcons{
+  position: absolute;
+    bottom: 1%;
+    left: 2%;
+    width: 54px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.socialIcons a{
+    font-size: 23px;
+    background: transparent;
+    color: #494949;
+}
+.socialIcons a:hover{
+  color: #878787;
 }
